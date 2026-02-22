@@ -1,0 +1,37 @@
+# ============================
+# Web Framework & Server
+# ============================
+fastapi
+uvicorn
+
+# ============================
+# Data Handling & Utilities
+# ============================
+pandas
+numpy
+
+# ============================
+# Machine Learning (Inference Only)
+# ============================
+scikit-learn
+joblib
+
+# ============================
+# NLP & Text Processing
+# ============================
+spacy
+
+# ============================
+# API Utilities
+# ============================
+python-multipart
+requests
+
+# =====================================================
+# Google Colab – Training & Evaluation Dependencies
+# (Not required for backend inference)
+# =====================================================
+matplotlib        # Visualization of training metrics
+seaborn           # Confusion matrices & plots
+imbalanced-learn  # Handling class imbalance (if used)
+nltk              # Text preprocessing during experiments
