@@ -17,21 +17,8 @@ scikit-learn
 joblib
 
 # ============================
-# NLP & Text Processing
-# ============================
-spacy
-
-# ============================
-# API Utilities
+# API & Environment
 # ============================
 python-multipart
-requests
-
-# =====================================================
-# Google Colab – Training & Evaluation Dependencies
-# (Not required for backend inference)
-# =====================================================
-matplotlib        # Visualization of training metrics
-seaborn           # Confusion matrices & plots
-imbalanced-learn  # Handling class imbalance (if used)
-nltk              # Text preprocessing during experiments
+httpx
+python-dotenv

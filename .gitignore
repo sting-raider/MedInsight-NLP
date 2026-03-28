@@ -35,6 +35,7 @@ ENV/
 # Python environment files
 .env
 .env.*
+!.env.example
 
 # Jupyter (if ever used)
 .ipynb_checkpoints/

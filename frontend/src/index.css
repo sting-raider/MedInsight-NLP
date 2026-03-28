@@ -1,118 +1,338 @@
+/* =============================================
+   MedInsight AI — Clinical Editorial Design System
+   ============================================= */
+
 :root {
-  /* Medical Midnight Palette */
-  --bg-dark: #0f172a;       /* Slate 900 */
-  --surface-dark: #1e293b;  /* Slate 800 */
-  --surface-light: #334155; /* Slate 700 */
-  
-  --primary: #3b82f6;       /* Blue 500 */
-  --primary-glow: rgba(59, 130, 246, 0.4);
-  
-  --success: #10b981;       /* Emerald 500 */
-  --warning: #f59e0b;       /* Amber 500 */
-  --danger: #ef4444;        /* Red 500 */
-  
-  --text-main: #f8fafc;     /* Slate 50 */
-  --text-muted: #94a3b8;    /* Slate 400 */
+  /* Canvas & Surfaces */
+  --canvas:         #FAF8F5;
+  --surface:        #FFFFFF;
+  --surface-hover:  #F5F2EE;
+  --border:         #E8E4DF;
+  --border-strong:  #D4CFC9;
+
+  /* Typography */
+  --navy:           #1B2A4A;
+  --navy-light:     #2D3E5F;
+  --text-primary:   #1B2A4A;
+  --text-secondary: #5A6578;
+  --text-muted:     #8B95A5;
+
+  /* Accents */
+  --crimson:        #C53030;
+  --crimson-light:  #E8434320;
+  --crimson-hover:  #A82828;
+
+  --teal:           #2D8B75;
+  --teal-light:     #2D8B7518;
+  --teal-hover:     #247560;
+
+  --amber:          #D97706;
+  --amber-light:    #D9770618;
+
+  --blue:           #2B6CB0;
+  --blue-light:     #2B6CB015;
+
+  /* Font stacks */
+  --font-display:   'DM Serif Display', Georgia, 'Times New Roman', serif;
+  --font-body:      'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  /* Spacing */
+  --radius-sm:  6px;
+  --radius-md:  10px;
+  --radius-lg:  14px;
+  --radius-xl:  20px;
+
+  /* Shadows */
+  --shadow-sm:  0 1px 3px rgba(27, 42, 74, 0.06);
+  --shadow-md:  0 4px 12px rgba(27, 42, 74, 0.08);
+  --shadow-lg:  0 8px 30px rgba(27, 42, 74, 0.10);
+  --shadow-crimson: 0 4px 14px rgba(197, 48, 48, 0.25);
+}
+
+
+/* =============================================
+   Base
+   ============================================= */
+
+*, *::before, *::after {
+  box-sizing: border-box;
 }
 
 body {
   margin: 0;
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  background: radial-gradient(circle at top center, #1e293b 0%, #0f172a 100%);
-  color: var(--text-main);
+  font-family: var(--font-body);
+  background: var(--canvas);
+  color: var(--text-primary);
   min-height: 100vh;
-  width: 100%; /* Ensure body is full width */
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.6;
 }
 
 #root {
-  width: 100%; /* Ensure React root is full width */
-  display: flex; /* Helps in some setups */
-  justify-content: center; /* Centers the direct child (App) */
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
-/* Custom Scrollbar */
+
+/* =============================================
+   Scrollbar
+   ============================================= */
+
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--surface-light); border-radius: 10px; }
+::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 10px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
 
-/* --- Utility Classes --- */
 
-/* Glass Card Effect */
-.glass-card {
-  background: rgba(30, 41, 59, 0.6);
-  -webkit-backdrop-filter: blur(16px);
-  backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 16px;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
-  transition: transform 0.2s, border-color 0.2s;
+/* =============================================
+   Layout Container
+   ============================================= */
+
+.app-container {
+  width: 100%;
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 48px 24px 32px;
 }
 
-.glass-card:hover {
-  border-color: rgba(59, 130, 246, 0.3);
+@media (max-width: 640px) {
+  .app-container {
+    padding: 24px 16px 24px;
+  }
 }
 
-/* Input Area Styling */
+
+/* =============================================
+   Header
+   ============================================= */
+
+.header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.header-icon {
+  width: 56px;
+  height: 56px;
+  background: linear-gradient(135deg, var(--crimson), #a82828);
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  box-shadow: var(--shadow-crimson);
+}
+
+.header h1 {
+  font-family: var(--font-display);
+  font-size: 42px;
+  font-weight: 400;
+  color: var(--navy);
+  margin: 0 0 8px;
+  letter-spacing: -0.5px;
+}
+
+.header h1 span {
+  color: var(--crimson);
+}
+
+.header p {
+  color: var(--text-secondary);
+  font-size: 15px;
+  margin: 0;
+  max-width: 380px;
+  margin: 0 auto;
+}
+
+@media (max-width: 640px) {
+  .header h1 {
+    font-size: 32px;
+  }
+  .header {
+    margin-bottom: 32px;
+  }
+}
+
+
+/* =============================================
+   Editorial Card
+   ============================================= */
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.card-inner {
+  padding: 24px;
+}
+
+@media (max-width: 640px) {
+  .card-inner {
+    padding: 18px;
+  }
+}
+
+
+/* =============================================
+   Input Section
+   ============================================= */
+
+.input-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--text-muted);
+  margin-bottom: 14px;
+}
+
 .input-field {
   width: 100%;
-  background: rgba(15, 23, 42, 0.6);
-  border: 2px solid var(--surface-light);
-  border-radius: 12px;
-  padding: 16px;
-  color: white;
+  background: var(--canvas);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 18px;
+  color: var(--text-primary);
   font-size: 16px;
-  line-height: 1.5;
-  transition: all 0.3s ease;
+  font-family: var(--font-body);
+  line-height: 1.6;
   resize: none;
-  font-family: inherit;
+  transition: all 0.25s ease;
+}
+
+.input-field::placeholder {
+  color: var(--text-muted);
 }
 
 .input-field:focus {
   outline: none;
-  border-color: var(--primary);
-  box-shadow: 0 0 0 4px var(--primary-glow);
-  background: rgba(15, 23, 42, 0.9);
+  border-color: var(--crimson);
+  box-shadow: 0 0 0 4px var(--crimson-light);
+  background: var(--surface);
 }
 
-/* Button Styling */
-.btn-primary {
-  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-  color: white;
-  border: none;
-  padding: 14px 24px;
-  border-radius: 12px;
-  font-weight: 600;
-  font-size: 16px;
-  cursor: pointer;
-  width: 100%;
-  transition: all 0.2s ease;
+.btn-analyse {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 10px;
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+  width: 100%;
+  margin-top: 16px;
+  padding: 16px 24px;
+  background: linear-gradient(135deg, var(--crimson), var(--crimson-hover));
+  color: #FFFFFF;
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  box-shadow: var(--shadow-crimson);
+  transition: all 0.2s ease;
+  letter-spacing: 0.3px;
 }
 
-.btn-primary:hover:not(:disabled) {
+.btn-analyse:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 8px 16px rgba(37, 99, 235, 0.4);
+  box-shadow: 0 6px 20px rgba(197, 48, 48, 0.35);
 }
 
-.btn-primary:disabled {
-  opacity: 0.7;
+.btn-analyse:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.btn-analyse:disabled {
+  opacity: 0.6;
   cursor: wait;
-  background: var(--surface-light);
+  background: var(--text-muted);
   box-shadow: none;
 }
 
-/* Loading Skeleton Animation */
+
+/* =============================================
+   Error Message
+   ============================================= */
+
+.error-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 20px;
+  padding: 14px 18px;
+  background: #FEF2F2;
+  border: 1px solid #FECACA;
+  border-radius: var(--radius-md);
+  color: var(--crimson);
+  font-size: 14px;
+}
+
+
+/* =============================================
+   Detected Symptoms Tag Cloud
+   ============================================= */
+
+.symptoms-cloud {
+  text-align: center;
+  margin-top: 36px;
+}
+
+.symptoms-cloud-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: var(--text-muted);
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.symptoms-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+
+.symptom-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  font-size: 13px;
+  color: var(--navy);
+  font-weight: 500;
+  box-shadow: var(--shadow-sm);
+}
+
+.symptom-tag svg {
+  color: var(--crimson);
+}
+
+
+/* =============================================
+   Loading Skeleton
+   ============================================= */
+
 .skeleton {
-  background: linear-gradient(90deg, #1e293b 25%, #334155 50%, #1e293b 75%);
+  background: linear-gradient(90deg, var(--border) 25%, var(--surface-hover) 50%, var(--border) 75%);
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
 }
 
 @keyframes shimmer {
@@ -120,7 +340,293 @@ body {
   100% { background-position: -200% 0; }
 }
 
-/* Prediction Bar Animation */
-@keyframes fillBar {
-  from { width: 0; }
+.skeleton-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  margin-bottom: 14px;
+}
+
+
+/* =============================================
+   Result Cards
+   ============================================= */
+
+.results-section {
+  margin-top: 36px;
+}
+
+.result-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  margin-bottom: 14px;
+  overflow: hidden;
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.result-card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.result-card.top-result {
+  border-left: 4px solid var(--crimson);
+  box-shadow: var(--shadow-md);
+}
+
+.result-card:not(.top-result) {
+  border-left: 4px solid var(--border-strong);
+}
+
+.result-header {
+  padding: 20px 24px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  user-select: none;
+}
+
+@media (max-width: 640px) {
+  .result-header {
+    padding: 16px 18px;
+  }
+}
+
+.result-header:hover {
+  background: var(--surface-hover);
+}
+
+.disease-name {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 400;
+  color: var(--navy);
+  margin: 0;
+}
+
+@media (max-width: 640px) {
+  .disease-name { font-size: 18px; }
+}
+
+
+/* =============================================
+   Severity Badge
+   ============================================= */
+
+.severity-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  margin-left: 10px;
+  white-space: nowrap;
+}
+
+.severity-HIGH {
+  background: var(--crimson-light);
+  color: var(--crimson);
+  border: 1px solid rgba(197, 48, 48, 0.25);
+}
+
+.severity-MEDIUM {
+  background: var(--amber-light);
+  color: var(--amber);
+  border: 1px solid rgba(217, 119, 6, 0.25);
+}
+
+.severity-LOW {
+  background: var(--blue-light);
+  color: var(--blue);
+  border: 1px solid rgba(43, 108, 176, 0.2);
+}
+
+
+/* =============================================
+   Confidence Bar
+   ============================================= */
+
+.confidence-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.confidence-track {
+  flex: 1;
+  max-width: 220px;
+  height: 6px;
+  background: var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.confidence-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.confidence-fill.top {
+  background: linear-gradient(90deg, var(--crimson), #E84343);
+}
+
+.confidence-fill.other {
+  background: var(--text-muted);
+}
+
+.confidence-value {
+  font-size: 14px;
+  font-weight: 700;
+  min-width: 44px;
+}
+
+.confidence-value.top {
+  color: var(--crimson);
+}
+
+.confidence-value.other {
+  color: var(--text-muted);
+}
+
+
+/* =============================================
+   Expanded Content
+   ============================================= */
+
+.result-body {
+  padding: 0 24px 24px;
+  border-top: 1px solid var(--border);
+}
+
+@media (max-width: 640px) {
+  .result-body {
+    padding: 0 18px 18px;
+  }
+}
+
+
+/* =============================================
+   AI Explanation Card
+   ============================================= */
+
+.ai-explanation {
+  margin-top: 18px;
+  padding: 18px;
+  background: linear-gradient(135deg, #FFF5F5, #FFFAF0);
+  border: 1px solid #FECACA;
+  border-radius: var(--radius-md);
+}
+
+.ai-explanation-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--crimson);
+}
+
+.ai-explanation p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--navy-light);
+}
+
+
+/* =============================================
+   Precaution Pills
+   ============================================= */
+
+.precautions-section {
+  margin-top: 18px;
+}
+
+.precautions-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+}
+
+.precaution-pills {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.precaution-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: var(--teal-light);
+  color: var(--teal);
+  padding: 6px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 500;
+  border: 1px solid rgba(45, 139, 117, 0.2);
+}
+
+
+/* =============================================
+   Static Description
+   ============================================= */
+
+.static-description {
+  margin-top: 16px;
+  display: flex;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  font-style: italic;
+  line-height: 1.6;
+}
+
+.static-description svg {
+  min-width: 14px;
+  margin-top: 3px;
+  color: var(--text-muted);
+}
+
+
+/* =============================================
+   Disclaimer Footer
+   ============================================= */
+
+.disclaimer {
+  margin-top: 48px;
+  padding: 20px 0;
+  border-top: 1px solid var(--border);
+  text-align: center;
+}
+
+.disclaimer p {
+  font-size: 12px;
+  color: var(--text-muted);
+  max-width: 440px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+.disclaimer strong {
+  color: var(--text-secondary);
+}
+
+.disclaimer svg {
+  vertical-align: -3px;
+  margin-right: 4px;
+  color: var(--teal);
 }

@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier, VotingClassifier
 from sklearn.preprocessing import LabelEncoder
 import joblib
 import os
@@ -19,18 +19,11 @@ def train():
         print("Please ensure dataset.csv, Disease precaution.csv, and symptom_Description.csv are in backend/data/")
         return
 
-    # 2. Data Cleaning (Crucial Step)
-    # Remove surrounding whitespace from column names and values to ensure matching
-    # e.g., "Malaria " vs "Malaria"
-    
-    # Clean Symptoms DataFrame
+    # 2. Data Cleaning
     for col in df_symptoms.columns:
         df_symptoms[col] = df_symptoms[col].astype(str).str.replace('_', ' ').str.strip()
     
-    # Clean Precautions DataFrame
     df_precautions['Disease'] = df_precautions['Disease'].astype(str).str.strip()
-    
-    # Clean Descriptions DataFrame
     df_descriptions['Disease'] = df_descriptions['Disease'].astype(str).str.strip()
     df_descriptions['Description'] = df_descriptions['Description'].astype(str).str.strip()
 
@@ -55,10 +48,18 @@ def train():
     le = LabelEncoder()
     y_encoded = le.fit_transform(y)
 
-    # 5. Train Model
-    print("Training Random Forest Classifier...")
-    rf = RandomForestClassifier(n_estimators=100, random_state=42)
-    rf.fit(X, y_encoded)
+    # 5. Train Voting Ensemble (Random Forest + Gradient Boosting)
+    print("Training Voting Ensemble (RF + GradientBoosting)...")
+    
+    rf = RandomForestClassifier(n_estimators=200, random_state=42, n_jobs=-1)
+    gb = GradientBoostingClassifier(n_estimators=150, learning_rate=0.1, max_depth=5, random_state=42)
+    
+    ensemble = VotingClassifier(
+        estimators=[('rf', rf), ('gb', gb)],
+        voting='soft'
+    )
+    ensemble.fit(X, y_encoded)
+    print("Ensemble trained successfully.")
     
     # 6. Build Knowledge Dictionaries
     
@@ -66,22 +67,20 @@ def train():
     precaution_map = {}
     for index, row in df_precautions.iterrows():
         disease = row['Disease']
-        # Get precautions 1-4, ignore NaNs
         precs = [row[f'Precaution_{i}'] for i in range(1, 5) if pd.notna(row.get(f'Precaution_{i}'))]
-        # Capitalize first letter for looks
         precs = [p.strip().capitalize() for p in precs]
         precaution_map[disease] = precs
 
-    # B. Description Map (New!)
+    # B. Description Map
     description_map = dict(zip(df_descriptions['Disease'], df_descriptions['Description']))
 
     # 7. Save Everything
     artifacts = {
-        "model": rf,
+        "model": ensemble,
         "label_encoder": le,
         "symptoms_list": unique_symptoms,
         "precautions": precaution_map,
-        "descriptions": description_map  # <--- Saved here
+        "descriptions": description_map
     }
     
     os.makedirs('models', exist_ok=True)
