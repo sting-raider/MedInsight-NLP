@@ -373,7 +373,7 @@ async def predict(input_data: SymptomInput):
     probs = model.predict_proba(input_vector)[0]
 
     # Bayesian Re-ranking
-    is_vague_input = len(user_symptoms) < 3
+    is_vague_input = len(user_symptoms) < 5
 
     adjusted_probs = []
     for i, prob in enumerate(probs):
@@ -383,12 +383,39 @@ async def predict(input_data: SymptomInput):
         weight = 1.0
         if is_vague_input:
             if severity == 'HIGH':
-                weight = 1.3
+                weight = 1.5
             elif severity == 'LOW':
-                weight = 0.5
+                weight = 0.2
+
+        # 1. Symptom co-occurrence bonus: Respiratory
+        if disease in ['Pneumonia', 'Bronchial Asthma', 'Tuberculosis']:
+            if 'high fever' in user_symptoms and any(s in user_symptoms for s in ['cough', 'breathlessness', 'mucoid sputum']):
+                weight *= 1.8
+        
+        # Penalize Heart attack if respiratory combo matches
+        if disease == 'Heart attack':
+            if 'high fever' in user_symptoms and any(s in user_symptoms for s in ['cough', 'breathlessness', 'mucoid sputum']):
+                weight *= 0.3
+                
+        # 2. Symptom co-occurrence bonus: Tropical/Fever
+        if disease in ['Malaria', 'Dengue']:
+            if 'high fever' in user_symptoms and any(s in user_symptoms for s in ['chills', 'sweating', 'vomiting']):
+                weight *= 1.8
+                
+        # 3. Penalize Heart attack if lacking specific severe symptoms
+        if disease == 'Heart attack':
+            has_severe = any(s in user_symptoms for s in ['palpitations', 'sweating', 'vomiting', 'left arm pain']) or 'left arm' in input_data.text.lower()
+            if not has_severe:
+                weight *= 0.25
 
         new_score = prob * weight
         adjusted_probs.append((disease, new_score, severity))
+
+    # Normalize the new scores so they sum up to 1.0
+    total_score = sum(score for _, score, _ in adjusted_probs)
+    if total_score > 0:
+        adjusted_probs = [(disease, score / total_score, severity) for disease, score, severity in adjusted_probs]
+
 
     adjusted_probs.sort(key=lambda x: x[1], reverse=True)
 
